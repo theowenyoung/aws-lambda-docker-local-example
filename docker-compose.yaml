@@ -1,0 +1,30 @@
+version: '3'
+services:
+  runtime:
+    image: lambci/lambda:nodejs12.x
+    ports:
+      - "9001:9001"
+    volumes: 
+      - ".:/var/task:ro,delegated"
+    environment:
+        DOCKER_LAMBDA_WATCH: 1
+        DOCKER_LAMBDA_STAY_OPEN: 1
+    command: 
+      - hello-world/app.lambdaHandler
+  api-gateway:
+    image: owenyoung/aws-lambda-api-gateway-local
+    ports:
+      - "3000:3000"
+    environment:
+      LAMBDA_ENDPOINT: "http://runtime:9001"
+  build:
+    image: lambci/lambda:build-nodejs12.x
+    volumes:
+      - ".:/var/task:delegated"
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+    command: 
+      - sh
+      - -c
+      - sam build
