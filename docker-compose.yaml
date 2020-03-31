@@ -15,6 +15,8 @@ services:
     image: owenyoung/aws-lambda-api-gateway-local
     ports:
       - "3000:3000"
+    volumes:
+      - ".:/var/task"
     environment:
       LAMBDA_ENDPOINT: "http://runtime:9001"
   build:

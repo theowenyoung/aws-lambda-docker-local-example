@@ -31,7 +31,7 @@ set AWS_SECRET_ACCESS_KEY=your_secret_access_key
 ### 1. Init A New Lambda Nodejs Function
 
 ```
-docker run -it -v ${PWD}:/var/task lambci/lambda:build-nodejs12.x sh -c sam init
+docker run -it -v ${PWD}:/var/task lambci/lambda:build-nodejs12.x sh -c "sam init"
 ```
 
 ### 2. Create docker-compose.yaml
@@ -58,6 +58,8 @@ services:
     image: owenyoung/aws-lambda-api-gateway-local
     ports:
       - "3000:3000"
+    volumes:
+      - ".:/var/task"
     environment:
       LAMBDA_ENDPOINT: "http://runtime:9001"
   build:
@@ -79,7 +81,7 @@ services:
 docker-compose up runtime api-gateway
 ```
 
-Now, you can visit your api at: <http://127.0.0.1:3000>, anything what you changed will trigger the auto reloading.
+Now, you can visit your api at: <http://127.0.0.1:3000/hello> (For official sam-app example, you can instead your real path), anything what you changed will trigger the auto reloading.
 
 ### 4. Build
 
